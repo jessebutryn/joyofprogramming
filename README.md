@@ -1,12 +1,11 @@
 <a id="readme-top"></a>
 
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![Unlicense License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
 
   <h3 align="center">Joy of Programming</h3>
 
@@ -28,25 +27,9 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#the-game-which-you-just-lost">The Game</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -76,3 +59,16 @@ The ["Joy of Programming - Software Engineering Simulator"](https://store.steamp
 Distributed under the GNU General Public License v3.0. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/jessebutryn/joyofprogramming.svg?style=for-the-badge
+[contributors-url]: https://github.com/jessebutryn/joyofprogramming/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/jessebutryn/joyofprogramming.svg?style=for-the-badge
+[forks-url]: https://github.com/jessebutryn/joyofprogramming/network/members
+[stars-shield]: https://img.shields.io/github/stars/jessebutryn/joyofprogramming.svg?style=for-the-badge
+[stars-url]: https://github.com/jessebutryn/joyofprogramming/stargazers
+[issues-shield]: https://img.shields.io/github/issues/jessebutryn/joyofprogramming.svg?style=for-the-badge
+[issues-url]: https://github.com/jessebutryn/joyofprogramming/issues
+[license-shield]: https://img.shields.io/github/license/jessebutryn/joyofprogramming.svg?style=for-the-badge
+[license-url]: https://github.com/jessebutryn/joyofprogramming/blob/master/LICENSE.txt
