@@ -18,7 +18,5 @@ for i in range(10):
         if c.rfid_tag == "Red":
             r += 1
     t = t + len(o)
-p = r / t
+    b.set_text(r / t)
 
-print(f"percentage: {p}")
-b.set_text(p)
