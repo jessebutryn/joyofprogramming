@@ -2,88 +2,126 @@ from pyjop import *
 from skimage import color, morphology
 from skimage.measure import regionprops, label
 from skimage.morphology import remove_small_objects, binary_closing, disk
+import cv2
 import numpy as np
 
 SimEnv.connect()
 SimEnvManager.first().reset(stop_code=False)
 
 drone = ServiceDrone.first()
+drone.set_fov(100)
 base_speed = 50
+
+lower_line = np.array([80, 50, 150])
+upper_line = np.array([200, 255, 255])
 
 def speed(left, right):
     drone.set_thruster_force_left(left)
     drone.set_thruster_force_right(right)
 
 def process_image(image):
-    # Convert image to HSV color space
-    hsv_image = color.rgb2hsv(image)
+    height = image.shape[0]
+    bottom_half = image[height//2:, :]
     
-    # Extract HSV channels
-    hue_channel = hsv_image[..., 0]
-    saturation_channel = hsv_image[..., 1]
-    value_channel = hsv_image[..., 2]
+    hsv = cv2.cvtColor(bottom_half, cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(hsv, lower_line, upper_line)
+    
+    # Enhanced morphological operations
+    # First close small gaps
+    kernel_small = np.ones((5,5), np.uint8)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel_small)
+    
+    # Then connect vertical gaps with larger kernel
+    kernel_vertical = np.ones((15,3), np.uint8)
+    mask = cv2.dilate(mask, kernel_vertical, iterations=1)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel_vertical)
+    
+    # Finally clean up noise
+    kernel_clean = np.ones((3,3), np.uint8)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel_clean)
+    
+    full_mask = np.zeros_like(image[:,:,0])
+    full_mask[height//2:, :] = mask
 
-    # Define yellow mask
-    stripes_mask = ((hue_channel <= 0.2) | (hue_channel >= 1.2)) & \
-               (saturation_channel >= 0.5) & (value_channel >= 0.3)
+    print(full_mask)
     
-    cleaned_mask = binary_closing(stripes_mask, disk(3))  # Close gaps
-    cleaned_mask = remove_small_objects(cleaned_mask, min_size=50) 
-    
-    print(cleaned_mask)
-
-    return cleaned_mask
+    return full_mask
 
 def find_lanes(mask):
-    # Label connected components
     labeled_mask = label(mask)
-
-    # Measure region properties and collect centroids
     regions = regionprops(labeled_mask)
-    centroids = [region.centroid for region in regions if region.area > 500]
     
-    return centroids
+    # Get all regions with minimal filtering
+    all_centroids = [(region.centroid, region.area) for region in regions if region.area > 200]
+    
+    if not all_centroids:
+        return []
+    
+    # Split regions into left and right side
+    image_center = mask.shape[1] // 2
+    left_regions = []
+    right_regions = []
+    
+    for centroid, area in all_centroids:
+        if centroid[1] < image_center:
+            left_regions.append((centroid, area))
+        else:
+            right_regions.append((centroid, area))
+    
+    # Get the largest region from each side
+    final_centroids = []
+    if left_regions:
+        left_centroid = max(left_regions, key=lambda x: x[1])[0]
+        final_centroids.append(left_centroid)
+    if right_regions:
+        right_centroid = max(right_regions, key=lambda x: x[1])[0]
+        final_centroids.append(right_centroid)
+    
+    return final_centroids
 
 def correct_course(centroids, image_width):
-    center_x = image_width // 2  # Image center
+    center_x = image_width // 2 
     
-    if len(centroids) == 2:  # Both lanes detected
+    if len(centroids) == 2: 
         left_lane, right_lane = sorted(centroids, key=lambda x: x[1])
         lane_center = (left_lane[1] + right_lane[1]) / 2
         deviation = center_x - lane_center
 
         print(f"center: {lane_center}, deviation: {deviation}")
 
-        if deviation > 10:  # Drone is too far left
-            return "Move right", base_speed, base_speed * 0.5
-        elif deviation < -10:  # Drone is too far right
-            return "Move left", base_speed * 0.5, base_speed
-        else:  # Drone is centered
+        # Smaller threshold for more responsive steering
+        if abs(deviation) <= 5:
             return "Stay centered", base_speed, base_speed
-    elif len(centroids) == 1:  # One lane detected
-        lane_x = centroids[0][1]
-        if lane_x < center_x:  # Lane is on the left
-            return "Move right", base_speed, base_speed * 0.5
-        else:  # Lane is on the right
-            return "Move left", base_speed * 0.5, base_speed
-    else:  # No lanes detected
+        
+        # Stronger steering response
+        steering_factor = min(abs(deviation) / 50, 0.7)  # Increased from 100 to 50, max from 0.5 to 0.7
+        
+        # Add minimum steering threshold
+        steering_factor = max(steering_factor, 0.2)  # Never steer less than 20%
+        
+        left_speed = base_speed
+        right_speed = base_speed
+        
+        if deviation > 5:  # Drone is too far left
+            right_speed *= (1 - steering_factor)
+            print(f"Steering right: reducing right speed to {right_speed}")
+        else:  # Drone is too far right
+            left_speed *= (1 - steering_factor)
+            print(f"Steering left: reducing left speed to {left_speed}")
+        
+        return f"Steering with factor {steering_factor}", left_speed, right_speed
+    else:
+        print(f"Both lanes not found")
         return "Stay centered", base_speed, base_speed
 
-# Main processing loop
 while SimEnv.run_main():
-    img = drone.get_camera_frame()  # Capture image from drone camera
-    
-    # Process image to detect lanes
+    img = drone.get_camera_frame()
     mask = process_image(img)
-    
-    # Find lane centroids
     centroids = find_lanes(mask)
-    
-    # Determine action based on lane positions
+
     action, left_speed, right_speed = correct_course(centroids, img.shape[1])
     print(f"Action: {action}")
-    
-    # Adjust drone speed
+
     speed(left_speed, right_speed)
 
 SimEnv.disconnect()
