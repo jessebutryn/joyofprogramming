@@ -11,34 +11,33 @@ p.set_target_rotation(0,14,5)
 def on_hit(rifle:SniperRifle, gt:float, coll:CollisionEvent):
     print(f"Hit: {coll.entity_name}\n {d}")
 
-# positions = []
-# unique_positions = set()
+positions = []
+unique_positions = set()
 
-# def is_new_position(new_pos, tolerance=0.1):
-#     for pos in unique_positions:
-#         if (abs(pos[0] - new_pos[0]) < tolerance and  # img_left
-#             abs(pos[1] - new_pos[1]) < tolerance):     # img_top
-#             return False
-#     return True
+def is_new_position(new_pos, tolerance=0.1):
+    for pos in unique_positions:
+        if (abs(pos[0] - new_pos[0]) < tolerance and  # img_left
+            abs(pos[1] - new_pos[1]) < tolerance):     # img_top
+            return False
+    return True
 
-# while SimEnv.run_main():
-#     o = r.get_object_detections()
-#     for d in o:
-#         if d.entity_name == "pad":
-#             # Only track image coordinates with reduced precision
-#             pos = (
-#                 round(d.img_left, 1),    # Reduced precision
-#                 round(d.img_top, 1)      # Reduced precision
-#             )
+while SimEnv.run_main():
+    o = r.get_object_detections()
+    for d in o:
+        if d.entity_name == "pad":
+            pos = (
+                round(d.img_left, 1),
+                round(d.img_top, 1)
+            )
             
-#             if is_new_position(pos):
-#                 unique_positions.add(pos)
-#                 positions.append({
-#                     'img_left': pos[0],
-#                     'img_top': pos[1]
-#                 })
-#                 print(f"\nNew position detected! Total unique positions: {len(unique_positions)}")
-#                 print(f"Position: left={pos[0]}, top={pos[1]}")
+            if is_new_position(pos):
+                unique_positions.add(pos)
+                positions.append({
+                    'img_left': pos[0],
+                    'img_top': pos[1]
+                })
+                print(f"\nNew position detected! Total unique positions: {len(unique_positions)}")
+                print(f"Position: left={pos[0]}, top={pos[1]}")
 
 #     sleep(0.5)  # Wait before checking again
 
