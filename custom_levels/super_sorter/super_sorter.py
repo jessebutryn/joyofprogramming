@@ -16,28 +16,28 @@ class DataModel(DataModelBase):
 data = DataModel()
 
 conveyors = [
-    {"name": "belt0", "location": (-25, 0, 0), "rotation": (0, 0, 0)},
-    {"name": "belt1", "location": (-21, 0, 0), "rotation": (0, 0, 90)},
-    {"name": "belt2", "location": (-25, 8, 0), "rotation": (0, 0, 0)},
-    {"name": "belt3", "location": (-21, 8, 0), "rotation": (0, 0, 90)},
-    {"name": "belt4", "location": (-25, -8, 0), "rotation": (0, 0, 0)},
-    {"name": "belt5", "location": (-21, -8, 0), "rotation": (0, 0, 90)},
-    {"name": "belt6", "location": (-16, 4.0, 0), "rotation": (0, 0, 0), "scale": (2, 1, 1)},
-    {"name": "belt7", "location": (-16, -4.0, 0), "rotation": (0, 0, 0), "scale": (2, 1, 1)},
-    {"name": "belt8", "location": (-9, -2.5, 0), "rotation": (0, 0, 90), "scale": (1, 1, 1)},
-    {"name": "belt9", "location": (-9, 6.5, 0), "rotation": (0, 0, 90), "scale": (2, 1, 1)},
-    {"name": "belt10", "location": (-4, 13, 0), "rotation": (0, 0, 0), "scale": (2, 1, 1)},
-    {"name": "belt11", "location": (-5.5, -6, 0), "rotation": (0, 0, 0), "scale": (1.5, 1, 1)},
-    {"name": "belt12", "location": (0, -6, 0), "rotation": (0, 0, 90), "scale": (2, 1, 1)},
+    {"name": "belt0", "location": (-25, 0, 0.6), "rotation": (0, 0, 0)},
+    {"name": "belt1", "location": (-21, 0, 0.5), "rotation": (0, 0, 90)},
+    {"name": "belt2", "location": (-25, 8, 0.6), "rotation": (0, 0, 0)},
+    {"name": "belt3", "location": (-21, 8, 0.5), "rotation": (0, 0, 90)},
+    {"name": "belt4", "location": (-25, -8, 0.6), "rotation": (0, 0, 0)},
+    {"name": "belt5", "location": (-21, -8, 0.5), "rotation": (0, 0, 90)},
+    {"name": "belt6", "location": (-16, 4.0, 0.4), "rotation": (0, 0, 0), "scale": (2, 1, 1)},
+    {"name": "belt7", "location": (-16, -4.0, 0.4), "rotation": (0, 0, 0), "scale": (2, 1, 1)},
+    {"name": "belt8", "location": (-9, -2.5, 0.3), "rotation": (0, 0, 90), "scale": (1, 1, 1)},
+    {"name": "belt9", "location": (-9, 6.5, 0.3), "rotation": (0, 0, 90), "scale": (2, 1, 1)},
+    {"name": "belt10", "location": (-4, 14, 0.2), "rotation": (0, 0, 0), "scale": (2, 1, 1)},
+    {"name": "belt11", "location": (-5.5, -6, 0.2), "rotation": (0, 0, 0), "scale": (1.5, 1, 1)},
+    {"name": "belt12", "location": (0, -6, 0.1), "rotation": (0, 0, 90), "scale": (2, 1, 1)},
     {"name": "belt13", "location": (2, 1, 0), "rotation": (0, 0, 0), "scale": (1, 1, 1)},
     {"name": "belt14", "location": (2, -13, 0), "rotation": (0, 0, 0), "scale": (1, 1, 1)},
 ]
 
 scanners = [
-    {"name": "scan0", "location": (-18.75, 0, 0.5), "rotation": (0, 0, -90)},
-    {"name": "scan1", "location": (-18.75, 8, 0.5), "rotation": (0, 0, -90)},
-    {"name": "scan2", "location": (-18.75, -8, 0.5), "rotation": (0, 0, -90)},
-    {"name": "scan3", "location": (2, -6, 0.5), "rotation": (0, 0, -90)},
+    {"name": "scan0", "location": (-18.75, 0, 1), "rotation": (0, 0, -90)},
+    {"name": "scan1", "location": (-18.75, 8, 1), "rotation": (0, 0, -90)},
+    {"name": "scan2", "location": (-18.75, -8, 1), "rotation": (0, 0, -90)},
+    {"name": "scan3", "location": (2, -6.1, 0.7), "rotation": (0, 0, -90)},
 ]
 
 spawners = [
@@ -48,13 +48,13 @@ spawners = [
 
 zones = [
     {"name": "Barrel_Zone", "location": (6.5, 1, 0.8), "scale": 2},
-    {"name": "Box_Zone", "location": (4, 13, 0.8), "scale": 2},
+    {"name": "Box_Zone", "location": (4, 14, 0.8), "scale": 2},
     {"name": "Cone_Zone", "location": (6.5, -13, 0.7), "scale": 2}
 ]
 
 misc = [
     {"name": "Barrel", "location": (6.5, 1, 0.4), "mesh": SpawnableMeshes.BarrelGreen},
-    {"name": "Box", "location": (4, 13, 0.3), "mesh": SpawnableMeshes.CardboardBox},
+    {"name": "Box", "location": (4, 14, 0.3), "mesh": SpawnableMeshes.CardboardBox},
     {"name": "Cone", "location": (6.5, -13, 0.2), "mesh": SpawnableMeshes.TrafficCone}
 ]
 
@@ -66,7 +66,7 @@ for c in conveyors:
 
 for s in scanners:
     editor.spawn_entity(SpawnableEntities.RangeFinder, s["name"], location=s["location"], rotation=s["rotation"])
-    editor.spawn_static_mesh(SpawnableMeshes.Cube, material=SpawnableMaterials.SimpleColor, location=(s["location"][0], s["location"][1], 0), scale=(0.75, .75, 1), color=Colors.Slategray)
+    editor.spawn_static_mesh(SpawnableMeshes.Cube, material=SpawnableMaterials.SimpleColor, location=(s["location"][0], s["location"][1], 0.5), scale=(1, .75, 1), color=Colors.Slategray)
 
 for s in spawners:
     editor.spawn_entity(SpawnableEntities.ObjectSpawner, s["name"], location=s["location"], rotation=s["rotation"])
@@ -79,7 +79,7 @@ for m in misc:
 
 
 def spawn_next():
-    if SimEnvManager.first().get_sim_time() - data.last_spawn_at < 5:
+    if SimEnvManager.first().get_sim_time() - data.last_spawn_at < 1.5:
         return
     data.last_spawn_at = SimEnvManager.first().get_sim_time()
     i = random.randint(0,2)
@@ -158,6 +158,9 @@ def begin_play():
     for t in TriggerZone.find_all():
         t.on_triggered(on_deliver)
     on_reset()
+    while True:
+        sleep(10)
+        spawn_next()
 
 editor.on_begin_play(begin_play)
 ### END ON BEGIN PLAY CODE ###
@@ -166,6 +169,7 @@ editor.on_begin_play(begin_play)
 def on_reset():
     print("level resetting")
     data.reset()
+    sleep(1)
     spawn_next()
     # sleep(3)
     # editor.play_camera_sequence([
