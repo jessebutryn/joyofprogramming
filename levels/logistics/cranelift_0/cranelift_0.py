@@ -3,8 +3,7 @@ from pyjop import *
 SimEnv.connect() and SimEnvManager.first().reset(stop_code=False)
 
 crane = AirliftCrane.find("crane")
-center = DataExchange.find("control_center")
-instruction_sets = center.get_data("instruction_sets")
+instruction_sets = DataExchange.first().get_data("instruction_sets")
 
 def move_crane_to(location):
     crane.set_target_location(location[0], location[1], location[2])
@@ -40,5 +39,4 @@ for instructions in instruction_sets:
 move_crane_to(pickup_loc)
 crane.pickup()
 move_crane_to([0,0,1])
-
 crane.release()
