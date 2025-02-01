@@ -27,9 +27,9 @@ editor.spawn_entity(SpawnableEntities.DataExchange, "exchange", location=(8, 0, 
 
 def bj_goal(goal_name: str):
     s = GoalState.Open
-    txt = f"Win 5 games of Blackjack. You have won {data.player_wins} so far."
+    txt = f"Win 3 games of Blackjack. You have won {data.player_wins} so far."
 
-    if data.player_wins >= 5:
+    if data.player_wins >= 3:
         s = GoalState.Success
 
     editor.set_goal_state(
@@ -150,8 +150,8 @@ def stand(sender:PushButton,simtime):
 
 def begin_play():
     on_reset()
-    editor.specify_goal("bj_goal", "Win 5 games against the dealer.", bj_goal)
-    editor.specify_goal("streak_goal", "Win 5 games in a row.", None, 0, True, True)
+    editor.specify_goal("bj_goal", "Win 3 games against the dealer.", bj_goal)
+    editor.specify_goal("streak_goal", "Don't lose any games.", None, 0, True, True)
     PushButton.find("hit").on_press(player_hit)
     PushButton.find("stand").on_press(stand)
     sleep(0.1)

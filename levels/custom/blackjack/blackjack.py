@@ -30,7 +30,6 @@ while SimEnv.run_main():
     sleep(2)
     cards = PlayingCard.find_all()
     player_cards = [card for card in cards if 'player' in card.entity_name]
-    print(player_cards)
 
     sleep(1)
 
@@ -39,13 +38,11 @@ while SimEnv.run_main():
 
     sleep(1)
 
-    print(f"Player total: {t}")
-
-    if t <= 11:
+    if t <= 12:
         hit.press()
         sleep(2)
         t = count_cards(player_cards)
-    elif t <= 16 and dv >= 7:
+    elif t <= 16 and dv >= 6:
         hit.press()
         sleep(2)
         t = count_cards(player_cards)
