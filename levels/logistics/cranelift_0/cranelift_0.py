@@ -24,17 +24,17 @@ def sim(instructions):
         elif instruction == 'B':
             x -= 1
         elif instruction == 'P':
-            picked_up = True
             pickup_loc = [x, y, 0]
-    if picked_up and x == 0 and y == 0:
+    if x == 0 and y == 0:
         return True, pickup_loc
     else:
         return False, None
 
 for instructions in instruction_sets:
-    isvalid, pickup_loc = sim(instructions)
-    if isvalid:
-        break
+    if 'P' in instructions:
+        isvalid, pickup_loc = sim(instructions)
+        if isvalid:
+            break
 
 move_crane_to(pickup_loc)
 crane.pickup()
