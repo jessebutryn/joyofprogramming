@@ -1,15 +1,6 @@
 from pyjop import *; import cv2; import numpy as np; SimEnv.connect() and SimEnvManager.first().reset(stop_code=False)
 
-COIN_AREA = {
-    1: (470, 520),
-    2: (630, 680),
-    5: (800, 870),
-    10: (700, 760),
-    20: (900, 960),
-    50: (1050, 1150),
-    100: (970, 1040),
-    200: (1180, 1300),
-}
+COIN_AREA = { 1: (470, 520), 2: (630, 680), 5: (800, 870), 10: (700, 760), 20: (900, 960), 50: (1050, 1150), 100: (970, 1040), 200: (1180, 1300)}
 
 while SimEnv.run_main():
     sleep(0.2)
